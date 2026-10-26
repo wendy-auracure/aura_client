@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { authClient } from '@/utils/supabase';
 
-export const COURSE_PRICE_LABEL = '每六个月 CAD $150';
+export const COURSE_PRICE_LABEL = 'CAD $150';
 export const COURSE_TITLE = '加拿大针灸统考考前辅导';
 
 export const COURSE_ABOUT = [
@@ -153,8 +153,5 @@ export function courseExpiryLabel(access) {
     if (!until) return '';
     const end = Date.parse(access.currentPeriodEnd);
     if (!access?.active && Number.isFinite(end) && end <= Date.now()) return `已于 ${until} 到期`;
-    if (access?.active && !access.cancelAtPeriodEnd && access.reason !== 'canceled_period') {
-        return `有效期至 ${until}，到期自动续费`;
-    }
     return `有效期至 ${until}`;
 }

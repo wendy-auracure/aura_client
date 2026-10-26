@@ -4,19 +4,16 @@
             <div class="heading">{{ courseTitle }}</div>
             <div class="price">{{ priceLabel }}</div>
             <div v-if="expiryLabel" class="expiry">{{ expiryLabel }}</div>
-            <div class="lede">共十节录播。每节含授课录像与课件，订阅后即可学习。</div>
+            <div class="lede">共十节录播。每节含授课录像与课件，一次购买后可学习六个月。</div>
             <a-alert v-if="banner" class="banner" :type="banner.type" :message="banner.text" show-icon />
             <div class="actions">
-                <a-button v-if="!signedIn" type="primary" size="large" @click="signIn">登录并订阅</a-button>
+                <a-button v-if="!signedIn" type="primary" size="large" @click="signIn">登录并购买</a-button>
                 <a-button v-else-if="!access?.active" type="primary" size="large" :loading="busy" @click="subscribe">
-                    订阅 · {{ priceLabel }}
+                    购买 · {{ priceLabel }}
                 </a-button>
-                <template v-else>
-                    <a-button type="primary" size="large" @click="continueCourse">{{ continueLabel }}</a-button>
-                    <a-button size="large" :loading="busy" @click="manage">管理订阅</a-button>
-                </template>
+                <a-button v-else type="primary" size="large" @click="continueCourse">{{ continueLabel }}</a-button>
             </div>
-            <div class="terms">每六个月收费 CAD $150。可随时取消，当前计费周期结束前仍可学习。课程仅授权本人使用，请勿录制或转发。</div>
+            <div class="terms">一次付款 CAD $150，自购买起 6 个月内可学习，到期后需再次购买。课程仅授权本人使用，请勿录制或转发。</div>
             <div v-if="access?.active" class="progress">
                 <div class="progress-label">已完成 {{ learnedCount }} / {{ lessons.length }}</div>
                 <div class="bar"><div class="bar-fill" :style="{ width: learnedWidth }"></div></div>
@@ -54,7 +51,6 @@
         confirmCourseCheckout,
         courseErrorMessage,
         createCourseCheckout,
-        createCoursePortal,
         courseExpiryLabel,
         fetchCourse,
         formatAccessUntil,
@@ -135,7 +131,7 @@
         return Boolean(lessonRow(lesson)?.completed);
     }
     function lessonState(lesson) {
-        if (!access.value?.active) return '未订阅';
+        if (!access.value?.active) return '未购买';
         if (lessonDone(lesson)) return '已完成';
         if (lessonRow(lesson)?.watchedAt) return '学习中';
         return '未开始';
@@ -162,17 +158,6 @@
             window.location.href = data.url;
         } catch (error) {
             message.error(courseErrorMessage(error));
-            busy.value = false;
-        }
-    }
-    async function manage() {
-        busy.value = true;
-        try {
-            const data = await createCoursePortal();
-            window.location.href = data.url;
-        } catch (error) {
-            message.error(courseErrorMessage(error));
-        } finally {
             busy.value = false;
         }
     }
