@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { authClient } from '@/utils/supabase';
 
-export const COURSE_PRICE_LABEL = '每三个月 CAD $150';
+export const COURSE_PRICE_LABEL = '每六个月 CAD $150';
 export const COURSE_TITLE = '加拿大针灸统考考前辅导';
 
 export const COURSE_ABOUT = [

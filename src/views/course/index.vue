@@ -16,7 +16,7 @@
                     <a-button size="large" :loading="busy" @click="manage">管理订阅</a-button>
                 </template>
             </div>
-            <div class="terms">每三个月收费 CAD $150。可随时取消，当前计费周期结束前仍可学习。课程仅授权本人使用，请勿录制或转发。</div>
+            <div class="terms">每六个月收费 CAD $150。可随时取消，当前计费周期结束前仍可学习。课程仅授权本人使用，请勿录制或转发。</div>
             <div v-if="access?.active" class="progress">
                 <div class="progress-label">已完成 {{ learnedCount }} / {{ lessons.length }}</div>
                 <div class="bar"><div class="bar-fill" :style="{ width: learnedWidth }"></div></div>
