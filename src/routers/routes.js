@@ -442,4 +442,36 @@ export default [
         },
         component: () => import('@/views/schedule/reschedule.vue'),
     },
+    {
+        path: '/course',
+        name: 'course',
+        meta: {
+            title: 'Course',
+        },
+        component: () => import('@/views/course/index.vue'),
+    },
+    {
+        path: '/course/learn',
+        name: 'course-learn',
+        meta: {
+            title: 'Course',
+        },
+        component: () => import('@/views/course/learn.vue'),
+    },
+    {
+        path: '/web/course',
+        name: 'web-course',
+        meta: {
+            title: 'Course',
+        },
+        component: () => import('@/views/course/index.vue'),
+    },
+    {
+        path: '/web/course/learn',
+        name: 'web-course-learn',
+        meta: {
+            title: 'Course',
+        },
+        component: () => import('@/views/course/learn.vue'),
+    },
 ];

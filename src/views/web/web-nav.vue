@@ -11,6 +11,9 @@
                     Upcoming visits
                 </div>
                 <div :class="['menu-item', { active: route.path === '/web/discover' }]" @click="router.push({ path: '/web/discover' })">Discover</div>
+                <div :class="['menu-item', { active: route.path.startsWith('/web/course') }]" @click="router.push({ path: '/web/course' })">
+                    Course
+                </div>
                 <div :class="['menu-item']" @click="account" v-if="uid">Account</div>
                 <div :class="['menu-item']" @click="singIn" v-if="!uid">Sign in</div>
                 <a-dropdown v-if="uid">
@@ -83,8 +86,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 160px;
                 height: 32px;
+                padding: 0 14px;
                 border-radius: 8px;
                 cursor: pointer;
                 &.active {

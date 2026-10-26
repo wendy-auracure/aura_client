@@ -28,6 +28,10 @@
                 <div class="icon-box"><img src="/src/assets/img/discover.svg" alt="" class="icon" /></div>
                 Discover
             </div>
+            <div class="menu-item" @click="course">
+                <div class="icon-box"><img src="/src/assets/img/course.svg" alt="" class="icon" /></div>
+                Course
+            </div>
             <div class="menu-item" @click="account" v-if="uid">
                 <div class="icon-box"><img src="/src/assets/img/account.svg" alt="" class="icon" /></div>
                 Account
@@ -81,6 +85,10 @@
     };
     const discover = () => {
         router.push({ path: '/discover' });
+        closeModal();
+    };
+    const course = () => {
+        router.push({ path: '/course' });
         closeModal();
     };
     const past = () => {
