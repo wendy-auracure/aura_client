@@ -145,5 +145,16 @@ export function formatAccessUntil(iso) {
     if (!iso) return '';
     const date = new Date(iso);
     if (Number.isNaN(date.getTime())) return '';
-    return new Intl.DateTimeFormat('en-CA', { dateStyle: 'medium' }).format(date);
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+}
+
+export function courseExpiryLabel(access) {
+    const until = formatAccessUntil(access?.currentPeriodEnd);
+    if (!until) return '';
+    const end = Date.parse(access.currentPeriodEnd);
+    if (!access?.active && Number.isFinite(end) && end <= Date.now()) return `已于 ${until} 到期`;
+    if (access?.active && !access.cancelAtPeriodEnd && access.reason !== 'canceled_period') {
+        return `有效期至 ${until}，到期自动续费`;
+    }
+    return `有效期至 ${until}`;
 }

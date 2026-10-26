@@ -3,6 +3,7 @@
         <div class="course">
             <div class="heading">{{ courseTitle }}</div>
             <div class="price">{{ priceLabel }}</div>
+            <div v-if="expiryLabel" class="expiry">{{ expiryLabel }}</div>
             <div class="lede">共十节录播。每节含授课录像与课件，订阅后即可学习。</div>
             <a-alert v-if="banner" class="banner" :type="banner.type" :message="banner.text" show-icon />
             <div class="actions">
@@ -54,6 +55,7 @@
         courseErrorMessage,
         createCourseCheckout,
         createCoursePortal,
+        courseExpiryLabel,
         fetchCourse,
         formatAccessUntil,
     } from '@/api/course';
@@ -70,7 +72,17 @@
     }
     const signedIn = computed(() => Boolean(userStore.uid));
     const lessons = ref(FALLBACK_LESSONS);
-    const access = ref(previewSubscribed ? { active: true, status: 'active' } : null);
+    const access = ref(
+        previewSubscribed
+            ? {
+                  active: true,
+                  status: 'active',
+                  reason: 'active',
+                  cancelAtPeriodEnd: false,
+                  currentPeriodEnd: '2027-01-25T12:00:00.000Z',
+              }
+            : null
+    );
     const busy = ref(false);
     const loadError = ref(false);
     const serviceError = ref('');
@@ -82,6 +94,7 @@
     const learnedCount = computed(() => lessons.value.filter((lesson) => progress.value[lesson.id]?.completed).length);
     const learnedWidth = computed(() => `${lessons.value.length ? Math.round((learnedCount.value / lessons.value.length) * 100) : 0}%`);
     const continueLabel = computed(() => (Object.values(progress.value).some((row) => row?.watchedAt) ? '继续学习' : '开始学习'));
+    const expiryLabel = computed(() => courseExpiryLabel(access.value));
 
     const banner = computed(() => {
         if (serviceError.value) {
@@ -203,6 +216,10 @@
     .price {
         margin-top: 8px;
         font-size: 18px;
+    }
+    .expiry {
+        margin-top: 6px;
+        color: #424242;
     }
     .lede,
     .terms {

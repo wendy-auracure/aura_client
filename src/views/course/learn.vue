@@ -6,6 +6,7 @@
                 <div class="identity">
                     <h1>{{ currentLesson?.title }} · {{ currentLesson?.summary }}</h1>
                     <p>{{ currentStamp }}</p>
+                    <p v-if="expiryLabel" class="expiry">{{ expiryLabel }}</p>
                 </div>
                 <div :class="['badge', { done: currentRow?.completed }]">{{ currentRow?.completed ? '已完成' : '未开始' }}</div>
             </header>
@@ -108,6 +109,7 @@
         askCourse,
         beatLesson,
         courseErrorMessage,
+        courseExpiryLabel,
         fetchCourse,
         fetchLessonPdf,
         openLesson,
@@ -125,6 +127,17 @@
         userStore.last_name = 'Lee';
     }
     const lessons = ref(FALLBACK_LESSONS);
+    const access = ref(
+        previewSubscribed
+            ? {
+                  active: true,
+                  status: 'active',
+                  reason: 'active',
+                  cancelAtPeriodEnd: false,
+                  currentPeriodEnd: '2027-01-25T12:00:00.000Z',
+              }
+            : null
+    );
     const lessonId = ref('1');
     const watermark = ref('');
     const videoReady = ref(false);
@@ -155,6 +168,7 @@
     const currentPoints = computed(() => LESSON_POINTS[Number(lessonId.value)] || []);
     const currentRow = computed(() => progressMap.value[lessonId.value] || null);
     const thread = computed(() => threads[lessonId.value] || []);
+    const expiryLabel = computed(() => courseExpiryLabel(access.value));
     const currentStamp = computed(() => {
         const row = currentRow.value;
         if (!row?.watchedAt) return '尚未开始学习';
@@ -447,6 +461,7 @@
         try {
             const data = await fetchCourse();
             if (data.lessons?.length) lessons.value = data.lessons;
+            access.value = data.access;
             if (!data.access?.active) {
                 router.push({ path: courseBase() });
                 return;
@@ -501,6 +516,9 @@
             margin: 6px 0 0;
             color: #60706c;
             font-size: 13px;
+        }
+        .expiry {
+            color: #424242;
         }
     }
     .badge {
